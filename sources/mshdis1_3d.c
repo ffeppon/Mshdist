@@ -385,9 +385,13 @@ int iniencdomain_3d(Info info,pMesh mesh, pSol sol){
       adja = &mesh->adja[4*(k-1)+1];
       iel = adja[i] / 4;
 
+      if(info.outer){
+      if ( !isIntDom(info,mesh->tetra[iel].ref)  || mesh->tetra[iel].ref != REFINT) nb++;
+      } else {
       /* Exclude outer boundary triangles from starting boundary */
-      if(!info.outer && !iel ) continue;
-      if ( !isIntDom(info,mesh->tetra[iel].ref) ) nb++;
+        if(!iel ) continue;
+        if ( !isIntDom(info,mesh->tetra[iel].ref)) nb++;
+      }
     }
   }
 
@@ -414,18 +418,20 @@ int iniencdomain_3d(Info info,pMesh mesh, pSol sol){
       adja = &mesh->adja[4*(k-1)+1];
       iel = adja[i] / 4;
 
+      if(!info.outer){
       /* Exclude outer boundary triangles from starting boundary */
       if( !iel ) continue;
       if ( !isIntDom(info,mesh->tetra[iel].ref) ) {
         list[nc] = 4*k+i;
         nc++;
       }
-
+      } else {
       /* Include outer boundary triangles as starting boundary */
-      /*if(!iel || mesh->tetra[iel].ref != REFINT){
+      if( !isIntDom(info,mesh->tetra[iel].ref)  || mesh->tetra[iel].ref != REFINT){
         list[nc] = 4*k+i;
         nc++;
-      }*/
+      }
+      }
     }
   }
 
