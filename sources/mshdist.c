@@ -134,6 +134,14 @@ static int parsar(int argc,char *argv[],Info *info,pMesh mesh1,pSol sol1,pMesh m
           info->pcloud = 1;
         break;
 
+      /* Keep external boundary triangles to initialize signed distance function*/
+      case 'o':
+        if ( !strcmp(argv[i],"-outer") ){
+            fprintf(stdout,"Using -outer option"); 
+            info->outer = 1;
+        }
+        break;
+
       case 'r':
         if ( ++i < argc ) {
           if ( isdigit(argv[i][0]) )
@@ -270,9 +278,11 @@ static int parsop(Info *info,pMesh mesh) {
 
     /* in mode -dom: read starting triangles (useful in 3d only) */
     if ( !strcmp(data,"starttrias") ) {
+      fprintf(stdout,"  %%%% READING StartTrias\n");
       fscanf(in,"%d",&info->nst);
       info->st = (int*)calloc(info->nst,sizeof(int));
       assert ( info->nst );
+      fprintf(stdout,"  %%%% %d Trias\n",info->nst);
       for (k=0; k<info->nst; k++)
         fscanf(in,"%d",&info->st[k]);
     }
@@ -522,6 +532,7 @@ int main(int argc,char **argv) {
   info.ncpu   = 1;
   info.res    = EPS;
   info.nexp   = 0;
+  info.outer   = 0;
   info.dt     = 0.001;
   info.maxit  = 1000;
   info.size   = SIZE;

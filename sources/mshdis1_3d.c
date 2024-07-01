@@ -386,7 +386,7 @@ int iniencdomain_3d(Info info,pMesh mesh, pSol sol){
       iel = adja[i] / 4;
 
       /* Exclude outer boundary triangles from starting boundary */
-      if( !iel ) continue;
+      if(!info.outer && !iel ) continue;
       if ( !isIntDom(info,mesh->tetra[iel].ref) ) nb++;
     }
   }

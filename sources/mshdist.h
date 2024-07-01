@@ -83,6 +83,7 @@ typedef struct {
   double   delta1[3],delta2[3],min1[3],max1[3],min2[3],max2[3],cen1[3],cen2[3];
   int      ncpu,libpid,typ[2];          /* for // purposes */
   int      maxit,ref,nsref,*sref;
+  int      outer;
   int      nexp,nintel,*intel,nst,*st,nsa,*sa,nsp,*sp; /* for -dom option */
   char     imprim,ddebug,option,bbbc,dsurf,fmm,fini,hausdorff,pcloud,specdist,startref,noscale,zip;
   mytime   ctim[TIMEMAX];

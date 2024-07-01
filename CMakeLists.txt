@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_BUILD_TYPE  "Release")
-SET(CMAKE_C_FLAGS   "-w -O3")
+SET(CMAKE_C_FLAGS   "-w -fcommon -O3")
 set(CMAKE_MACOSX_RPATH 1)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
@@ -20,8 +20,13 @@ target_link_libraries( libMshdist ${EXTRA_LIBS} ${Commons})
 add_executable(        mshdist sources/mshdist.c)
 target_link_libraries( mshdist libMshdist ${Commons})
 
-install(               TARGETS mshdist RUNTIME  DESTINATION "bin")
-install(               TARGETS libMshdist LIBRARY DESTINATION "lib")
-install(               FILES   ${headers} DESTINATION "include")
-set_target_properties( mshdist PROPERTIES INSTALL_RPATH "/usr/local/lib")
+install(               TARGETS mshdist RUNTIME  DESTINATION "$ENV{HOME}/bin")
+install(               TARGETS libMshdist LIBRARY DESTINATION "$ENV{HOME}/lib")
+install(               FILES   ${headers} DESTINATION "$ENV{HOME}/include")
+set_target_properties( mshdist PROPERTIES INSTALL_RPATH "$ENV{HOME}/lib")
 
+add_custom_target(show_includes
+    COMMAND ${CMAKE_CXX_COMPILER} -M ${CMAKE_SOURCE_DIR}/sources/mshdist.c
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Showing includes for your_source_file.cpp"
+)
